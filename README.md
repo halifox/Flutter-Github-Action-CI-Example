@@ -1,8 +1,8 @@
 # Flutter-Github-Action-CI-Example
 
-此示例演示了如何使用 GitHub Actions 通过 Flutter 同时构建 Windows、Linux、macOS、Android、iOS 和 Web 端的软件包。
+This example demonstrates how to use GitHub Actions to build packages for Windows, Linux, macOS, Android, iOS, and Web platforms simultaneously using Flutter.
 
-## 依赖项
+## Dependencies
 
 - [subosito/flutter-action](https://github.com/subosito/flutter-action)
 - [actions/checkout](https://github.com/actions/checkout)
@@ -10,16 +10,16 @@
 - [actions/setup-java](https://github.com/actions/setup-java)
 - [softprops/action-gh-release](https://github.com/softprops/action-gh-release)
 
-## 前提条件
+## Prerequisites
 
-- 确保你的 Flutter 项目已正确配置。
-- 在 GitHub 仓库中启用 GitHub Actions 
-- 设置 `Workflow permissions` 为 `Read and write permissions`。位于`Settings`>`Code and automation`>`Action`>`General`。
-- 配置必要的证书和密钥，尤其是 iOS 和 Android。
+- Ensure your Flutter project is correctly configured.
+- Enable GitHub Actions in your GitHub repository.
+- Set `Workflow permissions` to `Read and write permissions`. Located in `Settings` > `Code and automation` > `Action` > `General`.
+- Configure necessary certificates and keys, especially for iOS and Android.
 
-## 工作流配置
+## Workflow Configuration
 
-在你的 Flutter 项目的根目录下创建一个 `.github/workflows/build.yml` 文件，添加以下内容：
+Create a `.github/workflows/build.yml` file in the root directory of your Flutter project and add the following content:
 
 ```yaml
 name: Flutter Build
@@ -110,6 +110,7 @@ jobs:
           name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+
   android:
     runs-on: ubuntu-latest
     steps:
@@ -202,6 +203,7 @@ jobs:
           name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+
   macos:
     runs-on: macos-latest
     steps:
@@ -238,6 +240,7 @@ jobs:
           name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+
   ios:
     runs-on: macos-latest
     steps:
@@ -276,22 +279,23 @@ jobs:
           prerelease: false
 ```
 
-## 构建步骤
+## Build Steps
 
-1. **Checkout 代码**：从 GitHub 仓库中检出代码。
-2. **设置 Flutter**：安装指定版本的 Flutter。
-3. **安装依赖**：运行 `flutter pub get` 安装项目依赖。
-4. **构建平台**：依次构建 Android、iOS、Web、Windows、Linux 和 macOS 平台的发布包。
+1. **Checkout Code**: Check out code from the GitHub repository.
+2. **Set up Flutter**: Install the specified version of Flutter.
+3. **Install Dependencies**: Run `flutter pub get` to install project dependencies.
+4. **Build Platforms**: Build release packages for Android, iOS, Web, Windows, Linux, and macOS in order.
 
-## 使用说明
+## Usage Instructions
 
-1. 将上述 `build.yml` 文件添加到你的 GitHub 仓库中。
-2. 每当你推送带有标签的代码时，GitHub Actions 会自动触发构建过程。
-3. 构建成功后，可以在 Actions 面板查看构建日志和生成的二进制文件。
+1. Add the above `build.yml` file to your GitHub repository.
+2. Whenever you push code with tags, GitHub Actions will automatically trigger the build process.
+3. After
+
+a successful build, you can view the build logs and generated binaries in the Actions panel.
 
 ![](./doc/42d6b845959177a9334d882ce474b541_MD5.jpeg)
 
-## 贡献
+## Contributions
 
-欢迎任何贡献，提交问题或拉取请求！
-
+Contributions are welcome; please submit issues or pull requests!
