@@ -1,8 +1,89 @@
 # Flutter-Github-Action-CI-Example
 
-This example demonstrates how to use GitHub Actions to build packages for Windows, Linux, macOS, Android, iOS, and Web platforms simultaneously using Flutter.
+这是一个使用 GitHub Actions 和 Flutter 构建跨平台应用的示例项目。它展示了如何通过 GitHub Actions 自动化构建流程，支持 Windows、Linux、macOS、Android、iOS 和 Web 平台的应用打包。
 
-## Dependencies
+---
+
+## ✨ 功能
+
+- 自动化构建：使用 GitHub Actions 实现多个平台的同时构建。🚀
+- 支持多平台：支持 Android、iOS、Web、Windows、Linux 和 macOS。🌐
+- 发布和分发：通过 GitHub Releases 发布构建产物。📦
+- 灵活配置：可根据需求调整构建配置和环境。🔧
+
+---
+
+## 🎨 设计规范
+
+- 使用 Flutter 进行跨平台开发，确保应用在多个平台上的一致性。🌈
+- 按平台顺序进行构建：Android、iOS、Web、Windows、Linux 和 macOS。📋
+- 遵循 GitHub Actions 的最佳实践，确保工作流的高效和可维护性。✨
+
+---
+
+## 📸 截图
+
+![](./doc/42d6b845959177a9334d882ce474b541_MD5.jpeg)
+
+---
+
+## 🛠️ 使用方法
+
+### 前提条件 ✅
+
+1. 确保 Flutter 项目已正确配置。🛠️
+2. 启用 GitHub Actions 功能。⚙️
+3. 将仓库的 `Workflow permissions` 配置为 `Read and write permissions`，路径为：`Settings` > `Code and automation` > `Action` > `General`。🔑
+4. 针对 iOS 和 Android 平台，妥善配置所需的证书和密钥。📄
+
+### 工作流配置 📝
+
+在 Flutter 项目的根目录下创建 `.github/workflows/build.yml` 文件，并添加以下配置内容：
+
+[raw](./.github/workflows/build.yml)
+
+### 构建步骤 🛠️
+
+1. **签出代码**：从 GitHub 仓库提取代码。📥
+2. **设置 Flutter 环境**：安装项目指定的 Flutter 版本。🚀
+3. **安装依赖项**：运行 `flutter pub get` 以安装项目的必要依赖。📦
+4. **生成发布包**：按以下顺序依次构建 Android、iOS、Web、Windows、Linux 和 macOS 平台的发布包。🌍
+
+### 使用说明 📌
+
+1. 将上述配置文件 `build.yml` 添加至 GitHub 仓库中。🗂️
+2. 每当提交带标签的代码时，GitHub Actions 将自动启动构建流程。🔄
+3. 构建完成后，可在 GitHub Actions 面板中查看构建日志，并下载生成的二进制文件。📊
+
+---
+
+## ❓常见问题
+
+Q1: 如何修改 Flutter 版本？  
+A1: 可以在 `.github/workflows/build.yml` 中更改 `flutter-version` 的值。
+
+Q2: 如何添加新的平台？
+A2: 在工作流文件中添加相应的构建步骤，并安装所需的依赖。
+
+Q3: 构建失败怎么办？
+A3: 查看 GitHub Actions 面板中的构建日志，检查具体错误并修复相关问题。
+
+---
+
+## 🤝 贡献
+
+我们欢迎任何形式的社区贡献！  
+请阅读 [贡献指南 (CONTRIBUTING.md)](CONTRIBUTING.md)，了解如何提交 Issue、请求功能或贡献代码。
+
+---
+
+## 📜 许可证
+
+本项目遵循 [GPL-3.0 License](LICENSE)。
+
+---
+
+## 🙏 致谢
 
 - [subosito/flutter-action](https://github.com/subosito/flutter-action)
 - [actions/checkout](https://github.com/actions/checkout)
@@ -10,248 +91,10 @@ This example demonstrates how to use GitHub Actions to build packages for Window
 - [actions/setup-java](https://github.com/actions/setup-java)
 - [softprops/action-gh-release](https://github.com/softprops/action-gh-release)
 
-## Prerequisites
+## 📢 法律声明
 
-- Ensure your Flutter project is correctly configured.
-- Enable GitHub Actions in your GitHub repository.
-- Set `Workflow permissions` to `Read and write permissions`. Located in `Settings` > `Code and automation` > `Action` > `General`.
-- Configure necessary certificates and keys, especially for iOS and Android.
+本开源项目仅供个人技术学习与参考。由于可能涉及专利或版权相关内容，请在使用前确保已充分理解相关法律法规。未经授权，**请勿将本工具用于商业用途或进行任何形式的传播**。
 
-## Workflow Configuration
+本项目的所有代码和相关内容仅供个人技术学习与参考，任何使用产生的法律责任由使用者自行承担。
 
-Create a `.github/workflows/build.yml` file in the root directory of your Flutter project and add the following content:
-
-```yaml
-name: Flutter Build
-
-on:
-  workflow_dispatch:
-  push:
-    tags:
-      - '*'
-
-env:
-  NAME: "demo"
-  VERSION: ${{ github.ref_name }}
-
-jobs:
-  web:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up repository
-        uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Run tests
-        run: flutter test
-      - name: Build for Web
-        run: flutter build web --release
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-build
-          path: build/web/
-      - name: Create ZIP of compiled files
-        run: tar -czvf $NAME-$VERSION-web-universal.tar.gz -C build/web .
-      - name: Publish release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: ${{ env.NAME }}-${{ env.VERSION }}-web-universal.tar.gz
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-  linux:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up repository
-        uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-      - name: Install dependencies
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y ninja-build libgtk-3-dev
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Run tests
-        run: flutter test
-      - name: Build for Linux
-        run: flutter build linux --release
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-build
-          path: build/linux/x64/release/bundle/
-      - name: Create tar.gz archive
-        run: tar -czvf $NAME-$VERSION-linux-x64.tar.gz -C build/linux/x64/release/bundle .
-      - name: Publish release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: ${{ env.NAME }}-${{ env.VERSION }}-linux-x64.tar.gz
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-  android:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up repository
-        uses: actions/checkout@v4
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Run tests
-        run: flutter test
-      - name: Build APK
-        run: flutter build apk --release
-      - name: Build split APKs
-        run: flutter build apk --split-per-abi
-      - name: Build App Bundle
-        run: flutter build appbundle --release
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-build
-          path: build/app/outputs/
-      - name: Rename APKs and AABs
-        run: |
-          mv build/app/outputs/bundle/release/app-release.aab build/app/outputs/bundle/release/$NAME-$VERSION-android-universal.aab
-          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/$NAME-$VERSION-android-universal.apk
-          mv build/app/outputs/flutter-apk/app-arm64-v8a-release.apk build/app/outputs/flutter-apk/$NAME-$VERSION-android-arm64.apk
-          mv build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk build/app/outputs/flutter-apk/$NAME-$VERSION-android-armv7.apk
-          mv build/app/outputs/flutter-apk/app-x86_64-release.apk build/app/outputs/flutter-apk/$NAME-$VERSION-android-x64.apk
-      - name: Publish release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            build/app/outputs/bundle/release/${{ env.NAME }}-${{ env.VERSION }}-android-universal.aab
-            build/app/outputs/flutter-apk/${{ env.NAME }}-${{ env.VERSION }}-android-universal.apk
-            build/app/outputs/flutter-apk/${{ env.NAME }}-${{ env.VERSION }}-android-arm64.apk
-            build/app/outputs/flutter-apk/${{ env.NAME }}-${{ env.VERSION }}-android-armv7.apk
-            build/app/outputs/flutter-apk/${{ env.NAME }}-${{ env.VERSION }}-android-x64.apk
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-  windows:
-    runs-on: windows-latest
-    steps:
-      - name: Set up repository
-        uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Run tests
-        run: flutter test
-      - name: Build for Windows
-        run: flutter build windows --release
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-build
-          path: build/windows/
-      - name: Zip compiled files
-        run: Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath $NAME-$VERSION-windows-x64.zip
-      - name: Publish release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: ${{ env.NAME }}-${{ env.VERSION }}-windows-x64.zip
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-  macos:
-    runs-on: macos-latest
-    steps:
-      - name: Set up repository
-        uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Run tests
-        run: flutter test
-      - name: Build for macOS
-        run: flutter build macos --release
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-build
-          path: build/macos/
-      - name: Zip compiled files
-        run: zip -r $NAME-$VERSION-macos-universal.zip build/macos/Build/Products/Release/app.app
-      - name: Publish release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: ${{ env.NAME }}-${{ env.VERSION }}-macos-universal.zip
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-  ios:
-    runs-on: macos-latest
-    steps:
-      - name: Set up repository
-        uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Run tests
-        run: flutter test
-      - name: Build for iOS
-        run: flutter build ios --release --no-codesign
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-build
-          path: build/ios/
-      - name: Zip compiled files
-        run: zip -r $NAME-$VERSION-ios-universal.zip build/ios/iphoneos/Runner.app
-      - name: Publish release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: ${{ env.NAME }}-${{ env.VERSION }}-ios-universal.zip
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-
-```
-
-## Build Steps
-
-1. **Checkout Code**: Check out code from the GitHub repository.
-2. **Set up Flutter**: Install the specified version of Flutter.
-3. **Install Dependencies**: Run `flutter pub get` to install project dependencies.
-4. **Build Platforms**: Build release packages for Android, iOS, Web, Windows, Linux, and macOS in order.
-
-## Usage Instructions
-
-1. Add the above `build.yml` file to your GitHub repository.
-2. Whenever you push code with tags, GitHub Actions will automatically trigger the build process.
-3. After
-
-a successful build, you can view the build logs and generated binaries in the Actions panel.
-
-![](./doc/42d6b845959177a9334d882ce474b541_MD5.jpeg)
-
-## Contributions
-
-Contributions are welcome; please submit issues or pull requests!
+感谢您的理解与支持。
