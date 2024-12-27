@@ -60,13 +60,13 @@
 ## ❓常见问题
 
 Q1: 如何修改 Flutter 版本？  
-A1: 可以在 `.github/workflows/build.yml` 中更改 `flutter-version` 的值。
+A1: 可以在 `.github/workflows/build.yml` 中更改 `flutter-version` 的值。  
 
-Q2: 如何添加新的平台？
-A2: 在工作流文件中添加相应的构建步骤，并安装所需的依赖。
+Q2: 如何添加新的平台？  
+A2: 在工作流文件中添加相应的构建步骤，并安装所需的依赖。  
 
-Q3: 构建失败怎么办？
-A3: 查看 GitHub Actions 面板中的构建日志，检查具体错误并修复相关问题。
+Q3: 构建失败怎么办？  
+A3: 查看 GitHub Actions 面板中的构建日志，检查具体错误并修复相关问题。  
 
 ---
 
